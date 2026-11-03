@@ -172,6 +172,14 @@ class MyTests(BaseTestCase):
             username, expected_app_list, context_app_list)
 
     def check_app_availability_and_model_permissions(self, username, correct_app_list, context_app_list):
+        # Fork-specific normalisation, before any comparison:
+        # the REST API app is fork-only; it is registered in the admin on
+        # purpose but is not part of the upstream sales menu expectations.
+        context_app_list = [
+            app for app in context_app_list
+            if app['app_label'] != 'api'
+        ]
+
         # Check that the available
         if correct_app_list != context_app_list:
             if len(correct_app_list) == len(context_app_list):

@@ -1,5 +1,6 @@
 import re
 from django.contrib import admin
+from unfold.admin import ModelAdmin as UnfoldModelAdmin  # noqa: E402
 from django.contrib import messages
 from django.core.handlers.wsgi import WSGIRequest
 from django.utils.formats import date_format
@@ -35,7 +36,7 @@ safe_person_icon = mark_safe(
 safe_creation_date_icon = mark_safe(TODAY_ICON.format(creation_date_str))
 
 
-class BaseModelAdmin(admin.ModelAdmin):
+class BaseModelAdmin(UnfoldModelAdmin):
     empty_value_display = ''
     show_facets = admin.ShowFacets.NEVER
     save_on_top = True

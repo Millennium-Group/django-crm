@@ -1,0 +1,4 @@
+# Optional: MySQL/MariaDB driver. Not installed by default because it needs a C
+# toolchain (libmysqlclient-dev / default-libmysqlclient-dev) at build time.
+# PostgreSQL users get psycopg from requirements.txt instead.
+    mysqlclient==2.3.0

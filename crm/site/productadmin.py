@@ -2,6 +2,7 @@ from datetime import datetime
 from io import BytesIO
 
 from django.contrib import admin
+from unfold.admin import ModelAdmin as UnfoldModelAdmin  # noqa: E402
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils import timezone
@@ -29,7 +30,7 @@ from crm.models.pricingtier import DepartmentPriceRule
 CATEGORY = _('Category')
 
 
-class ProductAdmin(admin.ModelAdmin):
+class ProductAdmin(UnfoldModelAdmin):
     actions = ('export_price_lists',)
     fieldsets = [
         (None, {

@@ -1,9 +1,10 @@
 from django.contrib import admin
+from unfold.admin import ModelAdmin as UnfoldModelAdmin  # noqa: E402
 from crm.utils.admfilters import ScrollRelatedOnlyFieldListFilter
 from voip.models import Connection
 
 
-class ConnectionAdmin(admin.ModelAdmin):
+class ConnectionAdmin(UnfoldModelAdmin):
     list_display = (
         'callerid', 'provider', 'number', 'type', 'owner', 'active'
     )

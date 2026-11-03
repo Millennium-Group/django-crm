@@ -1,4 +1,5 @@
 from django.contrib import admin
+from unfold.admin import ModelAdmin as UnfoldModelAdmin  # noqa: E402
 from django.contrib.auth.models import Permission
 
 from analytics.models import ClosingReasonStat
@@ -21,7 +22,7 @@ from analytics.site.salesfunnelsadmin import SalesFunnelAdmin
 from crm.site.crmadminsite import crm_site
 
 
-class IncomeStatSnapshotAdmin(admin.ModelAdmin):
+class IncomeStatSnapshotAdmin(UnfoldModelAdmin):
     list_display = ('creation_date', 'id', 'owner',
                     'department', 'modified_by')
     list_filter = ('creation_date', 'owner', 'department')

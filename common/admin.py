@@ -1,6 +1,7 @@
 import re
 from django import forms
 from django.contrib import admin
+from unfold.admin import ModelAdmin as UnfoldModelAdmin  # noqa: E402
 from django.contrib.contenttypes.admin import GenericStackedInline
 from django.db.models import Q
 from django.forms import ModelForm
@@ -56,7 +57,7 @@ class DepartmentPriceRuleInline(CrmStackedInline):
         return formset
 
 
-class DepartmentAdmin(admin.ModelAdmin):
+class DepartmentAdmin(UnfoldModelAdmin):
     list_display = ('name',)
     fieldsets = (
         (None, {
@@ -72,7 +73,7 @@ class DepartmentAdmin(admin.ModelAdmin):
     inlines = [DepartmentPriceRuleInline]
 
 
-class LogEntryAdmin(admin.ModelAdmin):
+class LogEntryAdmin(UnfoldModelAdmin):
     list_display = ("__str__", "user", "content_type",
                     "action_time", 'object_id')
     list_display_links = ("__str__",)
@@ -101,7 +102,7 @@ class LogEntryAdmin(admin.ModelAdmin):
         return False
 
 
-class ReminderAdmin(admin.ModelAdmin):
+class ReminderAdmin(UnfoldModelAdmin):
     list_display = (
         'subject',
         'reminder_date',
@@ -164,7 +165,7 @@ class TheFileForm(ModelForm):
         return self.instance
 
 
-class TheFileAdmin(admin.ModelAdmin):
+class TheFileAdmin(UnfoldModelAdmin):
     form = TheFileForm
     list_display = ('id', 'content_type', 'object_id',
                     'to_object', 'file_name')

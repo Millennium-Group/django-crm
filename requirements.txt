@@ -4,14 +4,13 @@
     attrs==26.1.0
     certifi==2026.10.19
     charset-normalizer==3.5.2
-    Django==6.0.8
+    Django==6.1.2
     et-xmlfile==2.0.0
     frozenlist==1.8.0
     geoip2==5.3.0
     idna==3.20
     maxminddb==3.2.0
     multidict==7.1.0
-    mysqlclient==2.3.0
     numpy==2.5.4
     openpyxl==3.1.5
     pandas==3.0.6
@@ -27,3 +26,6 @@
     urllib3==2.8.0
     XlsxWriter==3.3.0
     yarl==1.25.1
+    django-ninja==1.7.3
+    django-unfold==0.110.1
+    psycopg[binary]==3.3.7

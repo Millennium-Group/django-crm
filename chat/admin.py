@@ -1,11 +1,12 @@
 from django.contrib import admin
+from unfold.admin import ModelAdmin as UnfoldModelAdmin  # noqa: E402
 
 from chat.models import ChatMessage
 from chat.site import chatmessageadmin
 from crm.site.crmadminsite import crm_site
 
 
-class ChatMessageAdmin(admin.ModelAdmin):
+class ChatMessageAdmin(UnfoldModelAdmin):
     list_display = (
         'content',
         'owner',

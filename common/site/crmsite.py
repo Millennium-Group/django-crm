@@ -11,6 +11,7 @@ from django.utils.timezone import localtime
 from django.utils.timezone import now
 from django.utils.translation import get_language
 from django.utils.safestring import mark_safe
+from unfold.sites import UnfoldAdminSite
 
 from common.models import Reminder
 from common.models import UserProfile
@@ -72,7 +73,7 @@ def index(self, request, extra_context=None):
 admin.AdminSite.index = index
 
 
-class BaseSite(admin.AdminSite):
+class BaseSite(UnfoldAdminSite):
     site_header = settings.PROJECT_NAME
     index_title = settings.INDEX_TITLE
     site_title = settings.SITE_TITLE

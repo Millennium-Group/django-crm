@@ -130,3 +130,12 @@ dmypy.json
 .vscode/
 pytest.ini
 .push.settings.jsonc
+
+# fork-local scratch
+.venv61/
+_token.txt
+.test-out*.txt
+.verify.log
+.server.log
+.dry.log
+_probe.py

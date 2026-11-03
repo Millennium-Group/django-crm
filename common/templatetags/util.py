@@ -9,7 +9,7 @@ from django.utils.safestring import mark_safe
 
 from common.models import TheFile
 from tasks.models import Task
-from tasks.site.taskadmin import COMPLETED_TITLE
+from tasks.constants import COMPLETED_TITLE
 
 register = Library()
 FILE_ERROR_SUBJ = "TheFile error: ID{}"

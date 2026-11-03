@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib import admin
+from unfold.admin import ModelAdmin as UnfoldModelAdmin  # noqa: E402
 from django.utils.translation import gettext_lazy as _
 
 from crm.site.crmmodeladmin import CrmModelAdmin
@@ -96,7 +97,7 @@ class MassContactAdmin(CrmModelAdmin):
         return self.list_filter
 
     def get_queryset(self, request):
-        return super(admin.ModelAdmin, self).get_queryset(request)
+        return super(UnfoldModelAdmin, self).get_queryset(request)
 
 
 admin.site.register(Signature, SignatureAdmin)

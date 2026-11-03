@@ -3,6 +3,7 @@ from urllib.parse import urlencode
 from django import forms
 from django.conf import settings
 from django.contrib import admin
+from unfold.admin import ModelAdmin as UnfoldModelAdmin  # noqa: E402
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models import Site
@@ -56,7 +57,7 @@ you_rcvd_msg_str = _("You received a message regarding - ")
 crm_prefix = _(settings.EMAIL_SUBJECT_PREFIX)
 
 
-class ChatMessageAdmin(admin.ModelAdmin):
+class ChatMessageAdmin(UnfoldModelAdmin):
     form = ChatMessageForm
     list_display = (
         'envelope', 'message', 'person', 'recipient_list',

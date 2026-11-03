@@ -1,4 +1,5 @@
 from django.contrib import admin
+from unfold.admin import ModelAdmin as UnfoldModelAdmin  # noqa: E402
 from django.contrib.admin.widgets import ForeignKeyRawIdWidget
 from django.utils.translation import gettext_lazy as _
 
@@ -17,7 +18,7 @@ from tasks.site import taskadmin
 from tasks.site.tagadmin import TagAdmin
 
 
-class TranslateNameModelAdmin(admin.ModelAdmin):
+class TranslateNameModelAdmin(UnfoldModelAdmin):
 
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)

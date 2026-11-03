@@ -1,3 +1,5 @@
+import inspect
+
 from django.contrib.admin.views.main import PAGE_VAR
 from django.template import Library
 from django.utils.html import format_html
@@ -7,6 +9,18 @@ from django.contrib.admin.templatetags.base import InclusionAdminNode
 
 
 register = Library()
+
+# Django 6.1 added a leading ``name`` argument to InclusionAdminNode; 6.0 and
+# earlier did not. Support both so the fork is not pinned to a single release.
+_INCLUSION_NODE_TAKES_NAME = 'name' in inspect.signature(
+    InclusionAdminNode.__init__
+).parameters
+
+
+def _inclusion_node(parser, token, name, **kwargs):
+    if _INCLUSION_NODE_TAKES_NAME:
+        return InclusionAdminNode(name, parser, token, **kwargs)
+    return InclusionAdminNode(parser, token, **kwargs)
 
 DOT = '.'
 ON_EACH_SIDE = 3
@@ -69,8 +83,9 @@ def pagination(page):
 
 @register.tag(name='pagination')
 def pagination_tag(parser, token):
-    return InclusionAdminNode(
+    return _inclusion_node(
         parser, token,
+        name='pagination',
         func=pagination,
         template_name='/common/import_emails/pagination.html',
         takes_context=False,

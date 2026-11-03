@@ -4,9 +4,10 @@ from django.utils.translation import gettext_lazy as _
 
 from crm.forms.admin_forms import CurrencyForm
 from crm.models import Currency
+from unfold.admin import ModelAdmin as UnfoldModelAdmin  # noqa: E402
 
 
-class CurrencyAdmin(admin.ModelAdmin):
+class CurrencyAdmin(UnfoldModelAdmin):
     form = CurrencyForm
     list_display = (
         'name', 'rate_to_state_currency',

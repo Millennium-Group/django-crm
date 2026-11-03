@@ -1,11 +1,12 @@
 from django.contrib import admin
+from unfold.admin import ModelAdmin as UnfoldModelAdmin  # noqa: E402
 from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
 
 from crm.utils.admfilters import ByCountryFilter
 
 
-class CityAdmin(admin.ModelAdmin):
+class CityAdmin(UnfoldModelAdmin):
     list_display = ('name', 'country')
     list_filter = (ByCountryFilter,)
     ordering = ('name', 'country')

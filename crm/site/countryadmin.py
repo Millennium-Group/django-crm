@@ -1,11 +1,12 @@
 from django.contrib import admin
+from unfold.admin import ModelAdmin as UnfoldModelAdmin  # noqa: E402
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from common.utils.helpers import SAFE_SUBJECT_ICON
 
 
-class CountryAdmin(admin.ModelAdmin):
+class CountryAdmin(UnfoldModelAdmin):
     class Media:
         css = {
             "all": ["css/flag-icons.css"],

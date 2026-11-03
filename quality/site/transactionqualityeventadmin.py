@@ -1,4 +1,5 @@
 from django.contrib import admin
+from unfold.admin import ModelAdmin as UnfoldModelAdmin  # noqa: E402
 from django.utils.translation import gettext_lazy as _
 
 from common.admin import FileInline
@@ -6,7 +7,7 @@ from common.utils.get_file_links import get_file_links
 from common.utils.helpers import SAFE_ATTACH_FILE_ICON
 
 
-class TransactionQualityEventAdmin(admin.ModelAdmin):
+class TransactionQualityEventAdmin(UnfoldModelAdmin):
     list_display = ('signal', 'percentage', 'details', 'files')
     inlines = [FileInline]
     readonly_fields = ['deal', 'creation_date']

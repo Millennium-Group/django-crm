@@ -1,4 +1,5 @@
 from django.contrib import admin
+from unfold.admin import ModelAdmin as UnfoldModelAdmin  # noqa: E402
 from django.http import HttpResponseRedirect
 
 from crm.site.crmadminsite import crm_site
@@ -9,12 +10,12 @@ from settings.models import Reminders
 from settings.models import StopPhrase
 
 
-class BannedCompanyNameAdmin(admin.ModelAdmin):
+class BannedCompanyNameAdmin(UnfoldModelAdmin):
     list_display = ('name',)
     search_fields = ('name',)
 
 
-class MassmailSettingsAdmin(admin.ModelAdmin):
+class MassmailSettingsAdmin(UnfoldModelAdmin):
     fieldsets = (
         (
             None,
@@ -42,12 +43,12 @@ class MassmailSettingsAdmin(admin.ModelAdmin):
         return False
 
 
-class PublicEmailDomainAdmin(admin.ModelAdmin):
+class PublicEmailDomainAdmin(UnfoldModelAdmin):
     list_display = ('domain',)
     search_fields = ('domain',)
 
 
-class RemindersAdmin(admin.ModelAdmin):
+class RemindersAdmin(UnfoldModelAdmin):
 
     # -- ModelAdmin methods -- #
 
@@ -61,7 +62,7 @@ class RemindersAdmin(admin.ModelAdmin):
         return False
 
 
-class StopPhraseAdmin(admin.ModelAdmin):
+class StopPhraseAdmin(UnfoldModelAdmin):
     actions = ['delete_selected']
     list_display = ('phrase', 'last_occurrence_date')
     search_fields = ('phrase',)

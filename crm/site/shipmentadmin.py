@@ -1,4 +1,5 @@
 from django.contrib import admin
+from unfold.admin import ModelAdmin as UnfoldModelAdmin  # noqa: E402
 from django.db.models import Q
 from django.db.models import OuterRef
 from django.db.models import Subquery
@@ -47,7 +48,7 @@ contract_shipping_date_str = mark_safe(
 view_deal_title = _("View the deal")
 
 
-class ShipmentAdmin(admin.ModelAdmin):
+class ShipmentAdmin(UnfoldModelAdmin):
     fieldsets = (
         (None, {
             'fields': (

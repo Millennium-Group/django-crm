@@ -1,6 +1,7 @@
 from decimal import Decimal
 from django.conf import settings
 from django.contrib import admin
+from unfold.admin import ModelAdmin as UnfoldModelAdmin  # noqa: E402
 from django.db.models import Case
 from django.db.models import CharField
 from django.db.models import DecimalField
@@ -30,7 +31,7 @@ APPROXIMATE_RATE = next(
     (x[1] for x in Rate.RATE_TYPE if x[0] == Rate.APPROXIMATE))
 
 
-class PaymentAdmin(admin.ModelAdmin):
+class PaymentAdmin(UnfoldModelAdmin):
     list_display = (
         'name',
         'value',

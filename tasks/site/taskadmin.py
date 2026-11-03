@@ -35,7 +35,7 @@ from tasks.site.tasksbasemodeladmin import TASK_NEXT_STEP
 from tasks.site.tasksbasemodeladmin import TasksBaseModelAdmin
 from tasks.utils.admfilters import ByProject
 
-COMPLETED_TITLE = gettext_lazy("I completed my part of the task")
+from tasks.constants import COMPLETED_TITLE  # NOQA
 task_was_created_str = _("The task was created")
 subtask_was_created_str = _("The subtask was created")
 the_subtask_str = _("The subtask")

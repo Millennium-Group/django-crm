@@ -3,6 +3,7 @@ from io import BytesIO
 from PIL import Image, ImageDraw
 from django.conf import settings
 from django.contrib import admin
+from unfold.admin import ModelAdmin as UnfoldModelAdmin  # noqa: E402
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django import forms
@@ -34,7 +35,7 @@ timezone_icon = mark_safe(
 view_chat_str = _("View chat messages")
 
 
-class UserProfileAdmin(admin.ModelAdmin):
+class UserProfileAdmin(UnfoldModelAdmin):
     empty_value_display = ''
     form = UserProfileForm
     list_display = [

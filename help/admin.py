@@ -1,6 +1,8 @@
 import threading
 from django import forms
 from django.contrib import admin
+from unfold.admin import ModelAdmin as UnfoldModelAdmin  # noqa: E402
+from unfold.admin import StackedInline as UnfoldStackedInline  # noqa: E402
 from django.contrib.auth.models import Group
 from django.utils import translation
 from django.utils.translation import gettext_lazy as _
@@ -29,7 +31,7 @@ class HelpPageForm(forms.ModelForm):
         self.initial['language_code'] = _thread_local.language_code
 
 
-class ParagraphInline(admin.StackedInline):
+class ParagraphInline(UnfoldStackedInline):
     extra = 0
     fieldsets = [
         (None, {
@@ -79,7 +81,7 @@ class ParagraphInline(admin.StackedInline):
         )
 
 
-class PageAdmin(admin.ModelAdmin):
+class PageAdmin(UnfoldModelAdmin):
     empty_value_display = LEADERS
     inlines = [ParagraphInline]
     list_display = (
@@ -135,7 +137,7 @@ class PageAdmin(admin.ModelAdmin):
         formset.save_m2m()
 
 
-class ParagraphAdmin(admin.ModelAdmin):
+class ParagraphAdmin(UnfoldModelAdmin):
     class Media:
         js = (
             '/static/common/js/vendor/nicEdit.js',

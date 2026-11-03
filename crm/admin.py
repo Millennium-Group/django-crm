@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib import admin
+from unfold.admin import ModelAdmin as UnfoldModelAdmin  # noqa: E402
 from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.auth.models import Group
 from django.db.models import F
@@ -56,7 +57,7 @@ from crm.utils.admfilters import ByDepartmentFilter
 admin.site.empty_value_display = '(None)'
 
 
-class MyModelAdmin(admin.ModelAdmin):
+class MyModelAdmin(UnfoldModelAdmin):
     list_filter = (ByDepartmentFilter,)
 
     # -- ModelAdmin methods -- #
@@ -254,16 +255,16 @@ class ContactAdmin(contactadmin.ContactAdmin):
         )
 
 
-class ContinentalRegionAdmin(admin.ModelAdmin):
+class ContinentalRegionAdmin(UnfoldModelAdmin):
     pass
 
 
-class SubRegionAdmin(admin.ModelAdmin):
+class SubRegionAdmin(UnfoldModelAdmin):
     list_display = ('name', "continental_region")
     ordering = ["continental_region", 'name']
 
 
-class IntermediaryRegionAdmin(admin.ModelAdmin):
+class IntermediaryRegionAdmin(UnfoldModelAdmin):
     list_display = ('name', "subregion")
     ordering = ["subregion", 'name']
 
@@ -317,7 +318,7 @@ class LeadAdmin(leadadmin.LeadAdmin):
         )
 
 
-class CrmEmailAdmin(admin.ModelAdmin):
+class CrmEmailAdmin(UnfoldModelAdmin):
     empty_value_display = LEADERS
     raw_id_fields = (
         'deal',
@@ -542,7 +543,7 @@ class LeadSourceAdmin(TranslateNameModelAdmin):
         return obj.email
 
 
-class RateAdmin(admin.ModelAdmin):
+class RateAdmin(UnfoldModelAdmin):
     list_display = (
         'currency', 'payment_date',
         'rate_to_state_currency',

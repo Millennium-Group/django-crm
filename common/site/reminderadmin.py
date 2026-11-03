@@ -1,5 +1,6 @@
 from urllib.parse import urlencode
 from django.contrib import admin
+from unfold.admin import ModelAdmin as UnfoldModelAdmin  # noqa: E402
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
@@ -21,7 +22,7 @@ reminders_title = Reminder._meta.verbose_name_plural  # NOQA
 alarm_icon = mark_safe(icon_str % (reminders_title, 'alarm'))
 
 
-class ReminderAdmin(admin.ModelAdmin):
+class ReminderAdmin(UnfoldModelAdmin):
     actions = ('delete_selected',)
     fieldsets = ((None, {
         'fields': (

@@ -1,9 +1,10 @@
 from django.contrib import admin
+from unfold.admin import ModelAdmin as UnfoldModelAdmin  # noqa: E402
 
 from help.site.paragraphInline import ParagraphInline
 
 
-class PageAdmin(admin.ModelAdmin):
+class PageAdmin(UnfoldModelAdmin):
     exclude = (
         'app_label',
         'page',

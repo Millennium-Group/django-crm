@@ -8,6 +8,7 @@ from common.settings import *       # NOQA
 from tasks.settings import *        # NOQA
 from voip.settings import *         # NOQA
 from .datetime_settings import *    # NOQA
+from .unfold_settings import UNFOLD  # NOQA
 
 # ---- Django settings ---- #
 
@@ -102,6 +103,9 @@ LOGIN_URL = '/admin/login/'
 
 # Application definition
 INSTALLED_APPS = [
+    'unfold',
+    'unfold.contrib.filters',
+    'unfold.contrib.forms',
     'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -118,7 +122,8 @@ INSTALLED_APPS = [
     'voip',
     'common.apps.CommonConfig',
     'settings',
-    'quality'
+    'quality',
+    'api.apps.ApiConfig',
 ]
 
 MIDDLEWARE = [
