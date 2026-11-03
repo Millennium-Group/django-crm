@@ -38,6 +38,11 @@ UNFOLD = {
         "light": lambda request: static("common/django-crm_logo_24px.svg"),
         "dark": lambda request: static("common/django-crm_logo_24px.svg"),
     },
+    "STYLES": [
+        # maps the CRM's legacy `material-icons` class onto Unfold's bundled
+        # Material Symbols font and fixes the object-tools header list
+        lambda request: static("common/css/crm_admin_compat.css"),
+    ],
     "SHOW_HISTORY": True,
     "SHOW_VIEW_ON_SITE": False,
     "SHOW_BACK_BUTTON": True,

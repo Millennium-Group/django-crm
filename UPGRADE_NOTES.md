@@ -66,6 +66,27 @@ Trailing slashes are canonical (`/api/leads/`); `/api/leads` 301-redirects.
 heading from its own template tag). The record id is now in the browser title
 and the URL.
 
+
+### Post-switch fixes (first visual review)
+
+1. **Icons rendered as words.** The CRM uses Material Icons ligatures in 220
+   places (`<i class="material-icons">file_download</i>`); the old custom
+   `base.html` loaded Google's Material Icons webfont, which went away with it.
+   `common/static/common/css/crm_admin_compat.css` maps `.material-icons` onto
+   Unfold's bundled **Material Symbols Outlined** (no network dependency).
+   Checked all 80 distinct ligature names in the codebase against Google's
+   Material Symbols codepoints: 79 exist, `info_outline` does not — those three
+   call sites now use `info`.
+   Measured: an icon element is 24 px wide where the same text in Arial is
+   147 px, computed family `"Material Symbols Outlined"`, `document.fonts.check`
+   true.
+2. **Bullet points in the header action row.** The CRM's
+   `change_list_object_tools.html` templates emit bare `<li>` (Django's admin
+   used to wrap them in `<ul class="object-tools">`); Unfold renders them in its
+   header row with no list wrapper, so markers appeared. The same stylesheet
+   makes `#header-inner li` `list-style: none` with flex + gap.
+   Measured: computed `list-style-type: none`, `display: flex`, gap 5.6 px.
+
 ## 4. Run it locally
 
 ```bash

@@ -479,7 +479,7 @@ class CategoryPriceRuleInline(CrmStackedInline):
 
     @staticmethod
     @admin.display(description=mark_safe(
-        '<i class="material-icons" style="color: var(--orange-fg)">info_outline</i>'
+        '<i class="material-icons" style="color: var(--orange-fg)">info</i>'
     ))
     def error_message(obj):
         msg = _(
