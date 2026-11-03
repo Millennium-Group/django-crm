@@ -141,21 +141,38 @@ class DealAdmin(CrmModelAdmin):
 
     def _create_formsets(self, request, obj, change):
         formsets, inline_instances = super()._create_formsets(request, obj, change)
+
+        def formset_for(inline_cls):
+            """Formsets line up with the *permitted* inlines, not with self.inlines.
+
+            Django drops inlines the user may not add, so positional access
+            (formsets[2]) raised IndexError for users/stages where an inline was
+            filtered out.
+            """
+            for formset, inline in zip(formsets, inline_instances):
+                if isinstance(inline, inline_cls):
+                    return formset
+            return None
+
         p = Payment.objects.filter(deal=obj).last()
-        if p:
+        payment_formset = formset_for(PaymentInline)
+        if p and payment_formset is not None:
             # change initial data for an empty inline form of payment
-            d = formsets[1].empty_form.base_fields
+            d = payment_formset.empty_form.base_fields
             d['amount'].initial = p.amount
             d['contract_number'].initial = p.contract_number
             d['invoice_number'].initial = p.invoice_number
             d['order_number'].initial = p.order_number
             if settings.MARK_PAYMENTS_THROUGH_REP:
                 d['through_representation'].initial = p.through_representation
-        signal_queryset = formsets[2].empty_form.base_fields['signal'].queryset
-        weights = signal_queryset.values_list('id', 'weight')
-        weight_str = ",".join([f'"{w[0]}":"{w[1]}"' for w in weights])
-        formsets[2].empty_form.base_fields[
-            'signal'].widget.attrs['initial_weights'] = f'{{{weight_str}}}'
+
+        signal_formset = formset_for(TransactionQualityEventInline)
+        if signal_formset is not None:
+            signal_queryset = signal_formset.empty_form.base_fields['signal'].queryset
+            weights = signal_queryset.values_list('id', 'weight')
+            weight_str = ",".join([f'"{w[0]}":"{w[1]}"' for w in weights])
+            signal_formset.empty_form.base_fields[
+                'signal'].widget.attrs['initial_weights'] = f'{{{weight_str}}}'
         return formsets, inline_instances
 
     def change_view(self, request, object_id, form_url='', extra_context=None):

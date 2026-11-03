@@ -149,6 +149,39 @@ Measured footprint on this workstation: app 335 MiB, db 36 MiB, caddy 14 MiB.
   `sqlite3.OperationalError: database table is locked` (an app daemon thread
   writing while the import runs). Passes on re-run; use PostgreSQL for CI.
 
+
+## 6a. Demo data
+
+`python manage.py seed_demo [--reset]` (in the `api` app) -> deterministic
+(seed 20261103) sample data for exploration:
+
+| Records | Count |
+|---|---|
+| companies / contacts | 60 / ~120 |
+| leads | 65 (about 18% disqualified) |
+| deals | 75 across the real stage ladder, ~18% won |
+| payments | ~30 on won deals (feeds the income analytics) |
+| requests / tasks / projects / products / emails | 45 / 65 / 4 / 8 / 25 |
+
+* owners are generated **within each record's department** — the CRM's
+  `clarify_permission` throws users out of records that belong to another
+  department, so cross-department ownership produced unopenable rows.
+* three demo reps (`rep.amara`, `rep.diego`, `rep.ines`, password
+  `DemoPass123!`) joined to `operators` + `co-workers` + their department group.
+  Without a role group they authenticate but every admin view returns 403 —
+  permissions in this CRM come from role groups, not the department group.
+* `--reset` deletes the CRM/task models first; the command refuses to run over
+  existing data otherwise.
+
+## 6b. Bug found while seeding
+
+`crm/site/dealadmin.py: _create_formsets` reached into `formsets[1]` and
+`formsets[2]` by position. Django returns formsets only for the inlines the
+user is allowed to add, so a permission-filtered inline shifted the list and the
+deal change form raised `IndexError: list index out of range` (HTTP 500). Now
+resolved by inline class, with a None guard. Verified: 4 users x 7 models
+change forms all 200.
+
 ## 7. Not done yet
 
 * Department-level visibility in the API.
