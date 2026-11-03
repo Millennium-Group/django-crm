@@ -78,9 +78,45 @@ uv pip install --python .venv/Scripts/python.exe -r requirements.txt   # Windows
 
 URLs: CRM `/en/123/`, admin `/en/456-admin/`, API `/api/`, docs `/api/docs`.
 
-## 5. Verification
+## 5. Containers (docker compose)
+
+Three services, one image:
+
+| Service | Image | Role |
+|---|---|---|
+| `db` | `postgres:17-alpine` | database, named volume `pgdata` |
+| `app` | built from `Dockerfile` | gunicorn (3 workers x 2 threads) + whitenoise, runs migrate + collectstatic on start |
+| `web` | `caddy:2-alpine` | reverse proxy, serves `/media/*` from the shared volume, adds security headers |
+
+* `webcrm/settings_docker.py` — env-driven settings (`DJANGO_SETTINGS_MODULE`),
+  fails fast if `DJANGO_SECRET_KEY` is missing. Postgres only, no SQLite.
+* `.env.example` → copy to `.env`; secrets are generated per deployment.
+* Non-root container user (uid 10001); `media` is a named volume owned by it.
+* `DJANGO_DISABLE_DAEMONS=1` is set for the migrate/collectstatic phase only —
+  the reminder/notification threads query the DB at import time and otherwise
+  traceback on a fresh volume. Flag honoured in `common/apps.py`.
+* `.gitattributes` forces LF for `*.sh`, `Dockerfile`, `docker/Caddyfile`: a
+  CRLF shebang fails inside Linux with `exec ...: no such file or directory`.
+
+```bash
+cp .env.example .env          # then set DJANGO_SECRET_KEY + POSTGRES_PASSWORD
+docker compose build
+docker compose up -d
+docker compose run --rm app manage setupdata     # first-time seed
+```
+
+Published port defaults to 8080 (`CRM_HTTP_PORT`). TLS: point
+`CRM_SITE_ADDRESS` at a DNS name (Caddy gets a certificate) or uncomment
+`tls internal` in `docker/Caddyfile` for a private CA.
+
+Measured footprint on this workstation: app 335 MiB, db 36 MiB, caddy 14 MiB.
+
+## 6. Verification
 
 * `manage.py check` — clean.
+* Compose stack on a fresh volume: health 200, API 401 without token / 200 with,
+  POST lead 201 + read back, static 362 KB served by whitenoise, media 200 via
+  Caddy, login page 200, **0 tracebacks** in the app log, data survives restart.
 * `python scripts/verify_stack.py` — 17/17 checks: API auth/CRUD, docs page,
   both admin sites, changelist + change form rendering, Unfold chrome present,
   every sidebar link reverses.
@@ -92,9 +128,9 @@ URLs: CRM `/en/123/`, admin `/en/456-admin/`, API `/api/`, docs `/api/docs`.
   `sqlite3.OperationalError: database table is locked` (an app daemon thread
   writing while the import runs). Passes on re-run; use PostgreSQL for CI.
 
-## 6. Not done yet
+## 7. Not done yet
 
-* `Dockerfile` / compose (Postgres + gunicorn + Caddy). Nothing in the repo to start from.
 * Department-level visibility in the API.
 * Write endpoints for companies/contacts/tasks.
-* Upstream PR — these changes are local to this branch.
+* No upstream PR by design: this branch is Millennium-internal (branding, the
+  fork-only API app registration, the test normalization for it).

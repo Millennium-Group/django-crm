@@ -13,6 +13,14 @@ class CommonConfig(AppConfig):
     def ready(self):
         # Implicitly connect a signal handler
         from common.signals.handlers import user_creation_handler   # NOQA
+
+        # Background senders query the database as soon as they start, so they
+        # must not run while management commands are still creating the schema
+        # (first boot, fresh volume). The container entrypoint sets this for
+        # migrate/collectstatic only.
+        if getattr(settings, 'DISABLE_DAEMON_THREADS', False):
+            return
+
         from common.utils.notif_email_sender import NotifEmailSender
 
         self.nes = NotifEmailSender()       # NOQA

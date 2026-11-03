@@ -1,0 +1,6 @@
+# Production-only dependencies for the container image.
+# Kept out of requirements.txt so local Windows development stays unchanged.
+-r requirements.txt
+
+gunicorn==26.2.0
+whitenoise==6.12.0

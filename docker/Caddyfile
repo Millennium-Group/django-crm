@@ -1,0 +1,46 @@
+# Reverse proxy for the CRM container.
+#
+# Serves uploaded media straight from disk and proxies everything else to
+# gunicorn. Static assets are served by whitenoise inside the app container, so
+# the two do not need a shared static volume.
+#
+# Set CRM_SITE_ADDRESS to change the listener:
+#   :80                      plain HTTP on every interface (default)
+#   10.0.0.5:8080            HTTP on a specific interface/port
+#   crm.example.com          Caddy fetches a public certificate automatically
+#   crm.lan -> add "tls internal" below to use Caddy's local CA instead
+
+{
+	admin off
+}
+
+{$CRM_SITE_ADDRESS::80} {
+	encode zstd gzip
+
+	# tls internal          # uncomment for a private CA certificate
+
+	handle_path /media/* {
+		root * /srv/media
+		file_server
+		header Cache-Control "public, max-age=86400"
+	}
+
+	handle {
+		reverse_proxy app:8000 {
+			header_up X-Forwarded-Proto {scheme}
+			header_up X-Real-IP {remote_host}
+		}
+	}
+
+	header {
+		-Server
+		X-Content-Type-Options nosniff
+		X-Frame-Options SAMEORIGIN
+		Referrer-Policy same-origin
+	}
+
+	log {
+		output stdout
+		format console
+	}
+}

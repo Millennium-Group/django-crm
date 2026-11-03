@@ -1,0 +1,6 @@
+# Shell scripts and Docker assets must keep LF endings inside the image —
+# a CRLF shebang fails with "exec ... : no such file or directory".
+*.sh            text eol=lf
+docker/Caddyfile text eol=lf
+Dockerfile      text eol=lf
+*.py            text
